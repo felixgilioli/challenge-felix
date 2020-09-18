@@ -1,0 +1,41 @@
+/* You can add global styles to this file, and also import other style files */
+body .space-card {
+  clear: left;
+  height: 16px;
+}
+body .card-default {
+  .p-card {
+    border-radius: 5px;
+    border: 1px solid #2196F3;
+  }
+  .p-card-body {
+    padding: 0;
+
+    .p-card-title {
+      background-color: #2196F3;
+      color: #ffffff;
+      padding: 7px;
+      border-radius: 5px 5px 0 0;
+      font-size: 16px;
+    }
+
+    .p-card-content {
+      padding: 10px;
+    }
+  }
+}
+
+.table-body-actions {
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.5s;
+  cursor: pointer;
+  padding: 10px;
+}
+table tr:hover .table-body-actions {
+  opacity: 1;
+}
+
+body .p-datatable .p-datatable-thead > tr > th {
+  background-color: #ffffff;
+}

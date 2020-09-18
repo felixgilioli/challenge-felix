@@ -1,0 +1,67 @@
+<p-button label="Ir para check in" [routerLink]="'/checkin'"></p-button>
+
+<div class="space-card"></div>
+
+<p-card class="card-default" header="Novo hóspede">
+
+  <form [formGroup]="formPerson" class="p-fluid p-grid p-formgrid">
+    <div class="p-field p-col-6 p-md-6">
+      <label for="fullName">Nome completo *</label>
+      <input type="text" formControlName="fullName"
+             maxlength="100" id="fullName"
+             required pInputText [(ngModel)]="person.fullName"/>
+    </div>
+
+    <div class="p-field p-col-6 p-md-6">
+      <label for="document">Documento *</label>
+      <input type="text" maxlength="20"
+             id="document" required
+             formControlName="document"
+             pInputText [(ngModel)]="person.document"/>
+    </div>
+
+    <div class="p-field p-col-6 p-md-6">
+      <label for="phoneNumber">Telefone *</label>
+      <p-inputMask inputId="phoneNumber" required
+                   formControlName="phoneNumber"
+                   [(ngModel)]="person.phoneNumber" mask="(99) 99999-9999"></p-inputMask>
+    </div>
+  </form>
+
+  <p-button label="Salvar" [disabled]="formPerson.invalid" (onClick)="savePerson()"></p-button>
+</p-card>
+
+<div class="space-card"></div>
+
+<p-card class="card-default" header="Consultas">
+
+  <p-table [value]="personList" [paginator]="true" [rows]="5"
+           [showCurrentPageReport]="true"
+           [totalRecords]="totalRecords"
+           [lazy]="true" (onLazyLoad)="loadData($event)">
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 28%">Nome</th>
+        <th style="width: 28%">Documento</th>
+        <th style="width: 28%">Telefone</th>
+        <th style="width: 16%"></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData>
+      <tr>
+        <td [title]="rowData.fullName">{{rowData.fullName | slice:0:35}}</td>
+        <td>{{rowData.document}}</td>
+        <td>{{rowData.phoneNumber}}</td>
+        <td>
+          <i class="pi pi-pencil table-body-actions" (click)="editPerson(rowData)"></i>
+          <i class="pi pi-trash table-body-actions" (click)="deletePerson(rowData)"></i>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>
+
+<p-confirmDialog header="Confirmação"
+                 rejectLabel="Não"
+                 acceptLabel="Sim"
+                 icon="pi pi-exclamation-triangle"></p-confirmDialog>

@@ -1,0 +1,122 @@
+<p-button label="Incluir hóspede" [routerLink]="'/person'"></p-button>
+
+<div class="space-card"></div>
+
+<p-card class="card-default" header="Novo check in">
+
+  <form [formGroup]="formCheckin" class="p-fluid p-grid p-formgrid">
+    <div class="p-field p-col-6 p-md-6">
+      <label for="entryTime">Data/Hora de entrada *</label>
+      <p-calendar inputId="entryTime" formControlName="entryTime"
+                  [maxDate]="checkin.departureTime"
+                  dateFormat="dd/mm/yy"
+                  required
+                  [showTime]="true"
+                  [(ngModel)]="checkin.entryTime"></p-calendar>
+    </div>
+
+    <div class="p-field p-col-6 p-md-6">
+      <label for="departureTime">Data/Hora de saída</label>
+      <p-calendar inputId="departureTime"
+                  formControlName="departureTime"
+                  [minDate]="checkin.entryTime"
+                  dateFormat="dd/mm/yy"
+                  [showTime]="true"
+                  [(ngModel)]="checkin.departureTime"></p-calendar>
+    </div>
+
+    <div class="p-field p-col-6 p-md-6">
+      <label for="person">Pessoa *</label>
+      <p-autoComplete [(ngModel)]="checkin.person"
+                      inputId="person"
+                      formControlName="person"
+                      required
+                      [dropdown]="true"
+                      field="fullName"
+                      [suggestions]="personCompleteList"
+                      (completeMethod)="completePerson($event)"></p-autoComplete>
+    </div>
+
+    <div class="p-field-checkbox p-col-6 p-md-6">
+      <p-checkbox [(ngModel)]="checkin.hasVehicle"
+                  formControlName="hasVehicle"
+                  binary="true" inputId="hasVehicle"></p-checkbox>
+      <label for="hasVehicle">Possui Veículo</label>
+    </div>
+  </form>
+
+  <p-button label="Salvar" [disabled]="formCheckin.invalid" (onClick)="saveCheckin()"></p-button>
+
+</p-card>
+
+<div class="space-card"></div>
+
+<p-card class="card-default" header="Consultas">
+
+  <div class="p-fluid p-grid p-formgrid">
+    <div class="p-field p-col-6 p-md-6">
+      <label for="personName">Pessoa</label>
+      <input type="text"
+             maxlength="100" id="personName"
+             pInputText [(ngModel)]="checkinFilter.personName"/>
+    </div>
+
+    <div class="p-field p-col-6 p-md-6">
+      <label for="personDocument">Documento</label>
+      <input type="text"
+             maxlength="20" id="personDocument"
+             pInputText [(ngModel)]="checkinFilter.personDocument"/>
+    </div>
+
+    <div class="p-field p-col-6 p-md-6">
+      <label for="personPhoneNumber">Telefone</label>
+      <p-inputMask inputId="personPhoneNumber"
+                   [(ngModel)]="checkinFilter.personPhoneNumber"
+                   mask="(99) 99999-9999"></p-inputMask>
+    </div>
+
+    <div class="p-field-checkbox p-col-6 p-md-6">
+
+    </div>
+
+    <div class="p-field-checkbox p-col-6 p-md-6">
+      <p-radioButton name="personSituation" value="PRESENT_IN_HOTEL"
+                     label="Pessoas ainda presentes"
+                     style="margin-right: 50px"
+                     [(ngModel)]="checkinFilter.personSituation"></p-radioButton>
+      <p-radioButton name="personSituation" value="NO_PRESENT_IN_HOTEL"
+                     label="Pessoas que já deixaram o hotel"
+                     [(ngModel)]="checkinFilter.personSituation"></p-radioButton>
+    </div>
+
+
+  </div>
+
+  <p-button label="Filtrar" (onClick)="refreshTable()"></p-button>
+
+  <div class="space-card"></div>
+
+  <p-table [value]="checkinList" [paginator]="true" [rows]="5"
+           [showCurrentPageReport]="true"
+           [totalRecords]="totalRecords"
+           [lazy]="true" (onLazyLoad)="loadData($event)">
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 28%">Nome</th>
+        <th style="width: 28%">Documento</th>
+        <th style="width: 28%">Valor gasto(R$)</th>
+        <th style="width: 16%"></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData>
+      <tr>
+        <td [title]="rowData.name">{{rowData.name | slice:0:35}}</td>
+        <td>{{rowData.document}}</td>
+        <td>{{rowData.amount | currencyFormat}}</td>
+        <td>
+          <i class="pi pi-pencil table-body-actions" (click)="editCheckin(rowData)"></i>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>
